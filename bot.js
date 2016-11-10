@@ -31,14 +31,14 @@ request(StackOverflowSearchUrl, function (error, response, body) {
     // console.log(info.items[0])
 
   }
-})
+});
 
 var checkConditions = function(conditions, message, str) {
   for (var i in conditions) {
-    if (!conditions[i]) {
+    if (conditions[i]) {
+      message.reply(str); 
       return;
     }
-    message.reply(str);
   }
 }
 
@@ -51,8 +51,7 @@ bot.on('message', function(message){
 
   //** TODO Change this code to a Method that pass input via a Parameter
   var condition1 = input.includes("KICKSTARTER BACKER") && input.includes("COURSE") && input.includes("FREE");
-  var condition2 = input.includes("KICKSTARTER BACKER") &&
-  input.includes("FREE");
+  var condition2 = input.includes("KICKSTARTER BACKER") && input.includes("FREE");
 
   var condition3 = input.includes("KICKSTARTER BACKER") && input.includes("COURSE");
   var condition4 = input.includes("KICKSTARTER")&& input.includes("COURSE");
@@ -65,17 +64,7 @@ bot.on('message', function(message){
   if(message.author.bot) return;  
   
   
-  if (condition4 || condition3 || condition5) {
-    //Message - is the channel that it will be sent to
-    // String - Te content of the mesage that will be sent
-    message.reply("yes it's free for Kickstarter backer who pledge above $100");
-  }
-
-
-  //  if(lateEvent){
-  //    message.reply("yeah email jason@devslope.com for more info");
-  // }
-  
+  checkConditions([condition5, condition3, condition4], message, "yes it's free for Kickstarter backer who pledge above $100");  
   checkConditions([lateEvent], message, "yeah email jason@devslope.com for more info");
   
   
