@@ -1,5 +1,4 @@
 var Discord = require ('discord.js');
-//Lets require/import the HTTP module
 var http = require('http');
 var bodyParser = require('body-parser');
 // to make https request e.g get,post,put,delete
@@ -41,6 +40,7 @@ bot.on('message', function(message){
   let prefix = '!';
   // Convert the message to UpperCase because is Case sensitive
   var input = message.content.toUpperCase();
+  
 
   //** TODO Change this code to a Method that pass input via a Parameter
   var condition1 = input.includes("KICKSTARTER BACKER") && input.includes("COURSE") && input.includes("FREE");
@@ -54,7 +54,10 @@ bot.on('message', function(message){
   var lateEvent = input.includes("LATE") && input.includes("PLEDGE");
 
 
-
+  //prevent the bot from issuing commands
+  if(message.author.bot) return;  
+  
+  
   if (condition4 || condition3 || condition5) {
     //Message - is the channel that it will be sent to
     // String - Te content of the mesage that will be sent
@@ -65,13 +68,17 @@ bot.on('message', function(message){
    if(lateEvent){
      message.reply("yeah email jason@devslope.com for more info");
   }
+  
+  
+  var responseObject = {
+  "i am pretty": "Yes. You are always Pretty. Keep Smiling.",
+  "wat": "Say what?",
+  "lol": "roflmaotntpmp"
+  };
 
-  if(input ==="I AM PRETTY" || input === "I AM PRETTY ?"){
-      message.reply("Yes. You are always Pretty. Keep Smiling. ");
-  }
-
-  if (input === "BOT WHO ARE YOU"){
-      message.reply("I'm here to help you to become a better developer. I am a work in progress");
+  var msg = message.content.toLowerCase();
+  if(responseObject[msg]) {
+    message.channel.sendMessage(responseObject[msg]);
   }
 
 
@@ -88,10 +95,13 @@ bot.on('message', function(message){
 
   }
 
+
+  //             // 
+  ///* COMMANDS *///
+  //             //
+  
   //safety check so bot doesn't accidentally reply to non commands
   if(!message.content.startsWith(prefix)) return;
-  //prevent the bot from issuing commands
-  if(message.author.bot) return;  
   
   
   //!help displays all available commands
@@ -148,7 +158,7 @@ bot.on('message', function(message){
 
 
 //Login to Discord using oauth
-bot.login('TOKEN_KEY');
+bot.login('MjQ1NjQxNjYxOTQ4ODg3MDQw.CwPDLg.wSCikqeTltFdZ9PobjHqAp9zTsY');
 
 
 
