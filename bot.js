@@ -16,7 +16,7 @@ var question = "breakpoint";
 // search the question with this tag
 var tags = "swift";
 // dont search a question with this tag
-var nontagged = "objective%20c"
+var nontagged = "objective%20c";
 
 // bot client
 const bot = new Discord.Client();
@@ -66,6 +66,7 @@ bot.on('message', function(message){
   
   checkConditions([condition5, condition3, condition4], message, "yes it's free for Kickstarter backer who pledge above $100");  
   checkConditions([lateEvent], message, "yeah email jason@devslope.com for more info");
+  checkConditions([input.includes("LOVING"), input.includes("LIKE") && input.includes("BOT")], message, "Thank you. You are way cooler than me");
   
   
   var responseObject = {
@@ -79,17 +80,12 @@ bot.on('message', function(message){
     message.channel.sendMessage(responseObject[msg]);
   }
 
-
-  if( (input.includes("LOVING") || input.includes("LIKE")) && input.includes("BOT") ) {
-      message.reply("Thank you. You are way cooler than me");
-   }
-
-   if ((input.includes("Hello") )) {
+  if (input.includes("Hello")) {
 
    }
 
   // TODO: Search a Question in Google
-  if(input.includes("Question") ){
+  if(input.includes("Question")){
     console.log('there was a question');
   }
 
