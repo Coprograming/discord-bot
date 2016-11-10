@@ -33,7 +33,14 @@ request(StackOverflowSearchUrl, function (error, response, body) {
   }
 })
 
-
+var checkConditions = function(conditions, message, str) {
+  for (var i in conditions) {
+    if (!conditions[i]) {
+      return;
+    }
+    message.reply(str);
+  }
+}
 
 // This will run whenever the bot get a message. / whenever a message is sent to a server that it is in
 bot.on('message', function(message){
@@ -65,9 +72,11 @@ bot.on('message', function(message){
   }
 
 
-   if(lateEvent){
-     message.reply("yeah email jason@devslope.com for more info");
-  }
+  //  if(lateEvent){
+  //    message.reply("yeah email jason@devslope.com for more info");
+  // }
+  
+  checkConditions([lateEvent], message, "yeah email jason@devslope.com for more info");
   
   
   var responseObject = {
@@ -92,7 +101,7 @@ bot.on('message', function(message){
 
   // TODO: Search a Question in Google
   if(input.includes("Question") ){
-
+    console.log('there was a question');
   }
 
 
