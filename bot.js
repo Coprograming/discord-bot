@@ -38,6 +38,7 @@ request(StackOverflowSearchUrl, function (error, response, body) {
   }
 });
 
+
 var checkConditions = function(conditions, message, str) {
   for (var i in conditions) {
     if (conditions[i]) {
@@ -46,17 +47,6 @@ var checkConditions = function(conditions, message, str) {
     }
   }
 }
-
-
- // TODO Parse JSON From StackOverflowSearchUrl
-request(StackOverflowSearchUrl, function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log("Parse Json Here");
-    //  console.log(body) // Show the HTML for the Google homepage.
-    // var info = JSON.parse(body);
-    // console.log(info.items[0])
-  }
-});
 
 
 bot.on('message', function(message){
@@ -86,8 +76,8 @@ bot.on('message', function(message){
   checkConditions([condition5, condition3, condition4], message, "yes it's free for Kickstarter backer who pledge above $100");  
   checkConditions([lateEvent], message, "yeah email jason@devslope.com for more info");
   checkConditions([input.includes("LOVING"), input.includes("LIKE") && input.includes("BOT")], message, "Thank you. You are way cooler than me");
-  checkConditions([input ==="I AM PRETTY" || input === "I AM PRETTY ?"], message, "Yes. You are always Pretty. Keep Smiling.");
   checkConditions([input === "BOT WHO ARE YOU"], message, "I'm here to help you to become a better developer. I am a work in progress");
+  
   
   var responseObject = {
   "i am pretty": "Yes. You are always Pretty. Keep Smiling.",
@@ -112,7 +102,7 @@ bot.on('message', function(message){
   
   //safety check so bot doesn't accidentally reply to non commands
   if(!message.content.startsWith(prefix)) return;
-  
+
   
   //!help displays all available commands
   let help = [ "courses",
