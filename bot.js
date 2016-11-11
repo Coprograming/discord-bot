@@ -18,7 +18,8 @@ var question = "breakpoint";
 var tags = "swift";
 // dont search a question with this tag
 var nontagged = "objective%20c"
-// bot client
+
+// bot client You can now use the bots features
 const bot = new Discord.Client();
 // This will run whenever the bot get a message. / whenever a message is sent to a server that it is in
 bot.on('message', function(message) {
@@ -26,46 +27,56 @@ bot.on('message', function(message) {
     // Convert the message to UpperCase because is Case sensitive
     var input = message.content.toUpperCase();
 
-    //making a call to stackoverflow --------------->
-    //var respondedToQuestion = false;
-    function stackOverflowApiResults(question) {
-        var options = {
-            version: 2.2
-        };
-        var context = new stackexchange(options);
-        var filter = {
-            key: 'lSCrDdqvXp3Bru)3satyHw((', //PUT THE KEY TO STACKEXCHANGE HERE!!!!!!!!!!
-            sort: 'relevance',
-            answers: '1',
-            q: question,
-            order: 'asc'
-        };
-        context.search.advanced(filter, function(err, results) {
-            if (results) {
-                //message.reply('Would you like me to give you a couple suggestions(YES!/NO!)');
-                //if (respondedToQuestion)
-                //console.log(results.items);
-                if (results.items[0].link) {
-                    message.reply(' Checkout this Link, and if it is not what You are Looking for Ask me the same question in a different Way :grinning:                                                                                                 ' + (results.items[0].link));
-                }
-            }
-        });
-        /*var messageFunc = (function()
-        var message = input;
-        console.log("this is message" + message);
-        return message;*/
+    //Call this function if you want to see if a word is contained in a message recieved from someone.
+    function sentenceContains(contains) {
+        if (input.indexOf(contains) > -1) {
+            return true;
+        }
     }
-    //console.log(messageFunc());
-    if (input.indexOf('?') > -1) {
-        //if (input.indexOf('?') > -1) {
-        var sentence = message.content.toString();
-        stackOverflowApiResults(sentence);
-        //}
+    //Call this function if you want to remove something from a sentence : Sentence is the sentence you want to edit : PHRASETOREPLACE is the part of the sentence you want to change : REPLACEPHRASEWITH is what you want to replace the phrase with!
+    function removeThatPhrase(sentence, phraseToReplace, replacePhraseWith) {
+        var phrase = sentence;
+        var newSentence = VerEx().find(phraseToReplace).replace(sentence, replacePhraseWith);
+        console.log(newSentence);
+        return newSentence
+    }
 
-        /*if (input.indexOf('YES!') > -1) {
-            respondedToQuestion = true;
-            stackOverflowApiResults(messageFunc);
-        }*/
+    //Use this function to reply to a message! Just put your reply in as the variable;)
+    function replyToMessageWith(replyMessage) {
+        message.reply(replyMessage);
+    }
+    //Making a call to stackoverflow.com --------------->
+    if (sentenceContains('HOW' && 'USE' && 'BOT')) {
+        replyToMessageWith('If you want to search stackoverflow.com for your question type ! in the beginning of your question and dont forget the question mark');
+    }
+    if (sentenceContains('!')) {
+        console.log('we got here');
+        function stackOverflowApiResults(question) {
+            var options = {
+                version: 2.2
+            };
+            var context = new stackexchange(options);
+            var filter = {
+                key: 'lSCrDdqvXp3Bru)3satyHw((', //PUT THE KEY TO STACKEXCHANGE HERE!!!!!!!!!!
+                sort: 'relevance',
+                answers: '1',
+                q: question,
+                order: 'asc'
+            };
+            context.search.advanced(filter, function(err, results) {
+                if (results) {
+                    if (results.items[0].link) {
+                        replyToMessageWith(' Checkout these Links I found for you. If it is not what You are looking for ask me the same question in a different way, or add more detail(ex: !How do I shuffle an array in Swift?) :grinning: ' + (results.items[0].link) + ' ' + (results.items[1].link));
+                    }
+                }
+            });
+        }
+
+        if (sentenceContains('?')) {
+            if (sentenceContains('!')) {
+                stackOverflowApiResults(removeThatPhrase(message.content, '!', ' '));
+            }
+        }
     }
     //Making call to Stackexchange ^^^^^^^
 
@@ -82,23 +93,23 @@ bot.on('message', function(message) {
     if (condition4 || condition3 || condition5) {
         //Message - is the channel that it will be sent to
         // String - Te content of the mesage that will be sent
-        message.reply("yes it's free for Kickstarter backer who pledge above $100");
+        replyToMessageWith("yes it's free for Kickstarter backer who pledge above $100");
     }
 
     if (lateEvent) {
-        message.reply("yeah email jason@devslope.com for more info");
+        replyToMessageWith("yeah email jason@devslope.com for more info");
     }
 
     if (input === "I AM PRETTY" || input === "I AM PRETTY ?") {
-        message.reply("Yes. You are always Pretty. Keep Smiling. ");
+        replyToMessageWith("Yes. You are always Pretty. Keep Smiling. ");
     }
 
     if (input === "BOT WHO ARE YOU") {
-        message.reply("I'm here to help you to become a better developer. I am a work in progress");
+        replyToMessageWith("I'm here to help you to become a better developer. I am a work in progress");
     }
 
     if ((input.includes("LOVING") || input.includes("LIKE")) && input.includes("BOT")) {
-        message.reply("Thank you. You are way cooler than me");
+        replyToMessageWith("Thank you. You are way cooler than me");
     }
 
     if (input.includes("Hello")) {}
@@ -161,7 +172,7 @@ bot.on('message', function(message) {
 
 });
 //Login to Discord using oauth
-bot.login('MjQ1MzkwMDg0NDgyOTI0NTQ2.CwQefg.p2rkiB8vIb5WHjbCyfCE3K1DA4s'); //MjQ1NjI0NzI4NDMyMTQ4NDgy.CwOzaQ.yB4TBGLmU9QMZcQrYt1aed3xZ20
+bot.login('MjQ1MzkwMDg0NDgyOTI0NTQ2.CwQefg.p2rkiB8vIb5WHjbCyfCE3K1DA4s');
 //*************  Node Js Server  ************************//
 
 //Lets define a port we want to listen to
@@ -178,16 +189,6 @@ function handleRequest(request, response) {
         response.end('It Works!! Path Hit: ' + request.url);
     }
 
-    //Create a server
-    var server = http.createServer(handleRequest);
-
-    //Lets start our server
-    server.listen(PORT, function() {
-        //Callback triggered when server is successfully listening. Hurray!
-        console.log("Server listening on: http://localhost:%s", PORT);
-    });
-
-    nd('It Works!! Path Hit: ' + request.url);
     //Create a server
     var server = http.createServer(handleRequest);
 
