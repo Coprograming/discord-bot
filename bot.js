@@ -1,6 +1,5 @@
 var Discord = require('discord.js');
 var stackexchange = require('stackexchange');
-var keyword_extractor = require("keyword-extractor");
 var Discord = require('discord.js');
 
 //Lets require/import the HTTP module
@@ -13,10 +12,6 @@ var request = require('request');
 //app.use(bodyParser.json());
 
 // Get method with the tittle of the variable question
-
-var StackOverflowSearchUrl = 'https://api.stackexchange.com/2.2/search?order=desc&sort=activity&tagged=' + tags + '&nottagged=' + nontagged + '&intitle=' + question + '&site=stackoverflow';
-
-// search by tittle in the question
 // this check the titlle of the question. Any tittle that have the breakpoint string will show in the response as an posible answer to the question. The bot will response the link of three of the best voted answer.
 var question = "breakpoint";
 // search the question with this tag
@@ -26,65 +21,57 @@ var nontagged = "objective%20c"
 //
 // bot client
 const bot = new Discord.Client();
-
 // This will run whenever the bot get a message. / whenever a message is sent to a server that it is in
 bot.on('message', function(message) {
     let prefix = '!';
     // Convert the message to UpperCase because is Case sensitive
     var input = message.content.toUpperCase();
 
-    //making a call to stackoverflow
-    //
-    if (input.indexOf('?') > -1) {
-        var sentence = message.content;
-        if (sentence != "?") {
-            var channelTags = [];
-            var extraction_result = keyword_extractor.extract(sentence, {
-                language: "english",
-                remove_digits: true,
-                return_changed_case: false,
-                return_chained_words: false,
-                remove_duplicates: true
-            });
-            if (channelId = 245393630624350209) { //DEVBOT CHANNEL245373360215818240
-                channelTags = extraction_result.concat("bot", "node.js", "javascript", "discord");
-            } else if (channelId = 207559045530255360) { //iOS 10 course CHANNEL
-                channelTags = extraction_result.concat("iOS", "swift", "xcode", "iOS10");
-            }
-            console.log(channelTags);
-            var options = {
-                version: 2.2
-            };
-            var context = new stackexchange(options);
-
-            var filter = {
-                key: 'lSCrDdqvXp3Bru)3satyHw((', //PUT THE KEY TO STACKEXCHANGE HERE!!!!!!!!!!
-                pagesize: 50,
-                tagged: extraction_result,
-                sort: 'activity',
-                order: 'asc'
-            };
-
-            // Get all the questions (http://api.stackexchange.com/docs/questions)
-            context.search.search(filter, function(err, results) {
-                if (results) {
-                    if (results.items) {
-
-                        if (results.items[0].link) {
-                            message.reply('Checkout this link ' + (results.items[0].link));
-                        }
-                        console.log(results.items);
-
-                    }
-                    //message.reply('Checkout this link ' + (results.items[1].link));
-                    if (results.has_more) {
-                        console.log('The bot will say please do some research on your own there are alot of articles on this subject');
-                    }
+    //making a call to stackoverflow --------------->
+    var respondedToQuestion = false;
+    function stackOverflowApiResults(question) {
+        var options = {
+            version: 2.2
+        };
+        var context = new stackexchange(options);
+        var filter = {
+            key: 'lSCrDdqvXp3Bru)3satyHw((', //PUT THE KEY TO STACKEXCHANGE HERE!!!!!!!!!!
+            sort: 'relevance',
+            answers: '1',
+            q: question,
+            order: 'asc'
+        };
+        context.search.advanced(filter, function(err, results) {
+            if (results) {
+                //message.reply('Would you like me to give you a couple suggestions(YES!/NO!)');
+                //if (respondedToQuestion) {
+                //console.log(results.items);
+                if (results.items[0].link) {
+                    message.reply('Checkout this Link, and if it is not what You are Looking for Ask me the same question in a different Way :grinning:                                                                                                 ' + (results.items[0].link));
                 }
-            });
-        }
+                //}
+
+            }
+        });
     }
-    //Making call to Stackexchange
+    /*var messageFunc = (function() {
+        var message = input;
+        console.log("this is message" + message);
+        return message;
+    });
+    console.log(messageFunc());*/
+    if (input.indexOf('?') > -1) {
+        if (input.indexOf('?') > -1) {
+            var sentence = message.content.toString();
+            stackOverflowApiResults(sentence);
+        }
+
+        /*if (input.indexOf('YES!') > -1) {
+            respondedToQuestion = true;
+            stackOverflowApiResults(messageFunc);
+        }*/
+    }
+    //Making call to Stackexchange ^^^^^^^
 
     //** TODO Change this code to a Method that pass input via a Parameter
     var condition1 = input.includes("KICKSTARTER BACKER") && input.includes("COURSE") && input.includes("FREE");
@@ -203,4 +190,5 @@ function handleRequest(request, response) {
     server.listen(PORT, function() {
         //Callback triggered when server is successfully listening. Hurray!
         console.log("Server listening on: http://localhost:%s", PORT);
-    });
+    })
+}

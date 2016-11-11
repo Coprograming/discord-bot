@@ -9,7 +9,6 @@
     "author": "Christian Nogueras Rosado",
     "license": "ISC",
     "dependencies": {
-        "keyword-extractor": "0.0.13",
         "stackexchange": "^0.4.0"
     }
 }
