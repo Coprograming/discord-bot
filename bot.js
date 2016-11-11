@@ -18,7 +18,6 @@ var question = "breakpoint";
 var tags = "swift";
 // dont search a question with this tag
 var nontagged = "objective%20c"
-//
 // bot client
 const bot = new Discord.Client();
 // This will run whenever the bot get a message. / whenever a message is sent to a server that it is in
@@ -28,7 +27,7 @@ bot.on('message', function(message) {
     var input = message.content.toUpperCase();
 
     //making a call to stackoverflow --------------->
-    var respondedToQuestion = false;
+    //var respondedToQuestion = false;
     function stackOverflowApiResults(question) {
         var options = {
             version: 2.2
@@ -44,27 +43,24 @@ bot.on('message', function(message) {
         context.search.advanced(filter, function(err, results) {
             if (results) {
                 //message.reply('Would you like me to give you a couple suggestions(YES!/NO!)');
-                //if (respondedToQuestion) {
+                //if (respondedToQuestion)
                 //console.log(results.items);
                 if (results.items[0].link) {
-                    message.reply('Checkout this Link, and if it is not what You are Looking for Ask me the same question in a different Way :grinning:                                                                                                 ' + (results.items[0].link));
+                    message.reply(' Checkout this Link, and if it is not what You are Looking for Ask me the same question in a different Way :grinning:                                                                                                 ' + (results.items[0].link));
                 }
-                //}
-
             }
         });
-    }
-    /*var messageFunc = (function() {
+        /*var messageFunc = (function()
         var message = input;
         console.log("this is message" + message);
-        return message;
-    });
-    console.log(messageFunc());*/
+        return message;*/
+    }
+    //console.log(messageFunc());
     if (input.indexOf('?') > -1) {
-        if (input.indexOf('?') > -1) {
-            var sentence = message.content.toString();
-            stackOverflowApiResults(sentence);
-        }
+        //if (input.indexOf('?') > -1) {
+        var sentence = message.content.toString();
+        stackOverflowApiResults(sentence);
+        //}
 
         /*if (input.indexOf('YES!') > -1) {
             respondedToQuestion = true;
@@ -105,7 +101,7 @@ bot.on('message', function(message) {
         message.reply("Thank you. You are way cooler than me");
     }
 
-    if ((input.includes("Hello"))) {}
+    if (input.includes("Hello")) {}
 
     // TODO: Search a Question in Google
     if (input.includes("Question")) {}
@@ -115,9 +111,9 @@ bot.on('message', function(message) {
         return;
 
     //prevent the bot from issuing commands
-    if (message.author.bot)
+    if (message.author.bot) {
         return;
-
+    }
     //!help displays all available commands
     let help = ["courses", "coupon"];
 
@@ -164,7 +160,6 @@ bot.on('message', function(message) {
     //TODO condition = when the --mac app-- --devslope mac app-- will be ready. response = the mac app will be ready in december 31
 
 });
-
 //Login to Discord using oauth
 bot.login('MjQ1MzkwMDg0NDgyOTI0NTQ2.CwQefg.p2rkiB8vIb5WHjbCyfCE3K1DA4s');
 //*************  Node Js Server  ************************//
@@ -190,5 +185,15 @@ function handleRequest(request, response) {
     server.listen(PORT, function() {
         //Callback triggered when server is successfully listening. Hurray!
         console.log("Server listening on: http://localhost:%s", PORT);
-    })
+    });
+
+    nd('It Works!! Path Hit: ' + request.url);
+    //Create a server
+    var server = http.createServer(handleRequest);
+
+    //Lets start our server
+    server.listen(PORT, function() {
+        //Callback triggered when server is successfully listening. Hurray!
+        console.log("Server listening on: http://localhost:%s", PORT);
+    });
 }
