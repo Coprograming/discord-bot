@@ -1,15 +1,15 @@
 {
-    "name": "discordbot",
-    "version": "1.0.0",
-    "description": "A discord Bot for the Devslope Discord Server",
-    "main": "bot.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "Christian Nogueras Rosado",
-    "license": "ISC",
-    "dependencies": {
-        "keyword-extractor": "0.0.13",
-        "stackexchange": "^0.4.0"
-    }
+  "name": "discordbot",
+  "version": "1.0.0",
+  "description": "A discord Bot for the Devslope Discord Server",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christian Nogueras Rosado",
+  "license": "ISC",
+  "dependencies": {
+    "stackexchange": "^0.4.0",
+    "verbal-expressions": "^0.2.1"
+  }
 }

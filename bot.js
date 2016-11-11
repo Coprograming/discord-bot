@@ -1,7 +1,7 @@
-var Discord = require('discord.js')
+var Discord = require('discord.js');
 var stackexchange = require('stackexchange');
-var keyword_extractor = require("keyword-extractor");
-var zlib = require('zlib');
+var Discord = require('discord.js');
+var VerEx = require('verbal-expressions');
 //Lets require/import the HTTP module
 var http = require('http');
 var bodyParser = require('body-parser');
@@ -12,77 +12,73 @@ var request = require('request');
 //app.use(bodyParser.json());
 
 // Get method with the tittle of the variable question
-var StackOverflowSearchUrl = 'https://api.stackexchange.com/2.2/search?order=desc&sort=activity&tagged=' + tags + '&nottagged=' + nontagged + '&intitle=' + question + '&site=stackoverflow';
-
-// search by tittle in the question
 // this check the titlle of the question. Any tittle that have the breakpoint string will show in the response as an posible answer to the question. The bot will response the link of three of the best voted answer.
 var question = "breakpoint";
 // search the question with this tag
 var tags = "swift";
 // dont search a question with this tag
 var nontagged = "objective%20c"
-//
-// bot client
-const bot = new Discord.Client();
 
+// bot client You can now use the bots features
+const bot = new Discord.Client();
 // This will run whenever the bot get a message. / whenever a message is sent to a server that it is in
 bot.on('message', function(message) {
     let prefix = '!';
     // Convert the message to UpperCase because is Case sensitive
     var input = message.content.toUpperCase();
 
-    //making a call to stackoverflow
-    //
-    if (input.indexOf('?') > -1) {
-        var sentence = message.content;
-        if (sentence != "?") {
-            var channelTags = [];
-            var extraction_result = keyword_extractor.extract(sentence, {
-                language: "english",
-                remove_digits: true,
-                return_changed_case: false,
-                return_chained_words: false,
-                remove_duplicates: true
-            });
-            if (channelId = 245393630624350209) { //DEVBOT CHANNEL245373360215818240
-                channelTags = extraction_result.concat("bot", "node.js", "javascript", "discord");
-            } else if (channelId = 207559045530255360) { //iOS 10 course CHANNEL
-                channelTags = extraction_result.concat("iOS", "swift", "xcode", "iOS10");
-            }
-            console.log(channelTags);
+    //Call this function if you want to see if a word is contained in a message recieved from someone.
+    function sentenceContains(contains) {
+        if (input.indexOf(contains) > -1) {
+            return true;
+        }
+    }
+    //Call this function if you want to remove something from a sentence : Sentence is the sentence you want to edit : PHRASETOREPLACE is the part of the sentence you want to change : REPLACEPHRASEWITH is what you want to replace the phrase with!
+    function removeThatPhrase(sentence, phraseToReplace, replacePhraseWith) {
+        var phrase = sentence;
+        var newSentence = VerEx().find(phraseToReplace).replace(sentence, replacePhraseWith);
+        console.log(newSentence);
+        return newSentence
+    }
+
+    //Use this function to reply to a message! Just put your reply in as the variable;)
+    function replyToMessageWith(replyMessage) {
+        message.reply(replyMessage);
+    }
+    //Making a call to stackoverflow.com --------------->
+    if (sentenceContains('HOW' && 'USE' && 'BOT')) {
+        replyToMessageWith('If you want to search stackoverflow.com for your question type ! in the beginning of your question and dont forget the question mark');
+    }
+    if (sentenceContains('!')) {
+        console.log('we got here');
+        function stackOverflowApiResults(question) {
             var options = {
                 version: 2.2
             };
             var context = new stackexchange(options);
-
             var filter = {
                 key: 'lSCrDdqvXp3Bru)3satyHw((', //PUT THE KEY TO STACKEXCHANGE HERE!!!!!!!!!!
-                pagesize: 50,
-                tagged: extraction_result,
-                sort: 'activity',
+                sort: 'relevance',
+                answers: '1',
+                q: question,
                 order: 'asc'
             };
-
-            // Get all the questions (http://api.stackexchange.com/docs/questions)
-            context.search.search(filter, function(err, results) {
+            context.search.advanced(filter, function(err, results) {
                 if (results) {
-                    if (results.items) {
-
-                        if (results.items[0].link) {
-                            message.reply('Checkout this link ' + (results.items[0].link));
-                        }
-                        console.log(results.items);
-
-                    }
-                    //message.reply('Checkout this link ' + (results.items[1].link));
-                    if (results.has_more) {
-                        console.log('The bot will say please do some research on your own there are alot of articles on this subject');
+                    if (results.items[0].link) {
+                        replyToMessageWith(' Checkout these Links I found for you. If it is not what You are looking for ask me the same question in a different way, or add more detail(ex: !How do I shuffle an array in Swift?) :grinning: ' + (results.items[0].link) + ' ' + (results.items[1].link));
                     }
                 }
             });
         }
+
+        if (sentenceContains('?')) {
+            if (sentenceContains('!')) {
+                stackOverflowApiResults(removeThatPhrase(message.content, '!', ' '));
+            }
+        }
     }
-    //Making call to Stackexchange
+    //Making call to Stackexchange ^^^^^^^
 
     //** TODO Change this code to a Method that pass input via a Parameter
     var condition1 = input.includes("KICKSTARTER BACKER") && input.includes("COURSE") && input.includes("FREE");
@@ -97,26 +93,26 @@ bot.on('message', function(message) {
     if (condition4 || condition3 || condition5) {
         //Message - is the channel that it will be sent to
         // String - Te content of the mesage that will be sent
-        message.reply("yes it's free for Kickstarter backer who pledge above $100");
+        replyToMessageWith("yes it's free for Kickstarter backer who pledge above $100");
     }
 
     if (lateEvent) {
-        message.reply("yeah email jason@devslope.com for more info");
+        replyToMessageWith("yeah email jason@devslope.com for more info");
     }
 
     if (input === "I AM PRETTY" || input === "I AM PRETTY ?") {
-        message.reply("Yes. You are always Pretty. Keep Smiling. ");
+        replyToMessageWith("Yes. You are always Pretty. Keep Smiling. ");
     }
 
     if (input === "BOT WHO ARE YOU") {
-        message.reply("I'm here to help you to become a better developer. I am a work in progress");
+        replyToMessageWith("I'm here to help you to become a better developer. I am a work in progress");
     }
 
     if ((input.includes("LOVING") || input.includes("LIKE")) && input.includes("BOT")) {
-        message.reply("Thank you. You are way cooler than me");
+        replyToMessageWith("Thank you. You are way cooler than me");
     }
 
-    if ((input.includes("Hello"))) {}
+    if (input.includes("Hello")) {}
 
     // TODO: Search a Question in Google
     if (input.includes("Question")) {}
@@ -126,9 +122,9 @@ bot.on('message', function(message) {
         return;
 
     //prevent the bot from issuing commands
-    if (message.author.bot)
+    if (message.author.bot) {
         return;
-
+    }
     //!help displays all available commands
     let help = ["courses", "coupon"];
 
@@ -175,7 +171,6 @@ bot.on('message', function(message) {
     //TODO condition = when the --mac app-- --devslope mac app-- will be ready. response = the mac app will be ready in december 31
 
 });
-
 //Login to Discord using oauth
 bot.login('MjQ1MzkwMDg0NDgyOTI0NTQ2.CwQefg.p2rkiB8vIb5WHjbCyfCE3K1DA4s');
 //*************  Node Js Server  ************************//
@@ -185,27 +180,21 @@ bot.login('MjQ1MzkwMDg0NDgyOTI0NTQ2.CwQefg.p2rkiB8vIb5WHjbCyfCE3K1DA4s');
 
 //We need a function which handles requests and send response
 function handleRequest(request, response) {
-    response.end('It Works!! Path Hit: ' + request.url);
+
+    //Lets define a port we want to listen to
+    const PORT = 8080;
+
+    //We need a function which handles requests and send response
+    function handleRequest(request, response) {
+        response.end('It Works!! Path Hit: ' + request.url);
+    }
+
+    //Create a server
+    var server = http.createServer(handleRequest);
+
+    //Lets start our server
+    server.listen(PORT, function() {
+        //Callback triggered when server is successfully listening. Hurray!
+        console.log("Server listening on: http://localhost:%s", PORT);
+    });
 }
-
-//Create a server
-var server = http.createServer(handleRequest);
-
-//Lets start our server
-/*server.listen(PORT, function() {
-    //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://localhost:%s", PORT);
-});
-urray !console.log("Server listening on: http://localhost:%s", PORT);
-});
-*/
-ver = http.createServer(handleRequest);
-
-//Lets start our server
-/*server.listen(PORT, function() {
-    //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://localhost:%s", PORT);
-});
-urray !console.log("Server listening on: http://localhost:%s", PORT);
-});
-*/
